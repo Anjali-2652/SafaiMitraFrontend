@@ -13,6 +13,7 @@
   "dependencies": {
     "@expo/vector-icons": "^15.1.1",
     "@react-native-async-storage/async-storage": "^2.2.0",
+    "@react-native-picker/picker": "^2.11.4",
     "@react-navigation/bottom-tabs": "^7.15.10",
     "@react-navigation/elements": "^2.6.3",
     "@react-navigation/native": "^7.2.2",
@@ -35,6 +36,7 @@
     "expo-system-ui": "~6.0.9",
     "expo-web-browser": "~15.0.10",
     "jwt-decode": "^4.0.0",
+    "lucide-react-native": "^1.11.0",
     "nativewind": "^4.2.2",
     "prettier-plugin-tailwindcss": "^0.5.14",
     "react": "19.1.0",

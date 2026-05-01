@@ -1,9 +1,17 @@
+import { Ionicons } from "@expo/vector-icons";
+import { Link, router } from "expo-router";
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, Alert, ScrollView } from "react-native";
-import { registerUser } from "../../src/api/auth.api";
-import { router, Link } from "expo-router";
-import Input from "../../components/ui/Input";
+import {
+  Alert,
+  Image,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import Button from "../../components/ui/Button";
+import { registerUser } from "../../src/api/auth.api";
 
 export default function RegisterScreen() {
   const [full_name, setFullName] = useState("");
@@ -11,6 +19,7 @@ export default function RegisterScreen() {
   const [address, setAddress] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleRegister = async () => {
     if (!full_name || !phone || !address || !password) {
@@ -38,41 +47,82 @@ export default function RegisterScreen() {
 
   return (
     <ScrollView className="flex-1 bg-secondary px-6 pt-20">
-      <View className="items-center mb-8">
-        <Text className="text-4xl font-bold text-primary">सफाई Mitra</Text>
-        <Text className="text-gray-500 mt-2">Create Your Account</Text>
+      <View className="items-center">
+        <Image
+          source={require("../../public/logo.png")}
+          className="w-32 h-32  rounded-full "
+        />
       </View>
 
-      <View className="bg-white rounded-3xl p-6 shadow-lg mb-10">
-        <Input
-          label="Full Name"
-          placeholder="Enter full name"
-          value={full_name}
-          onChangeText={setFullName}
-        />
+      <View className="bg-white rounded-3xl px-10 pt-16  py-10 shadow-lg mb-10">
+        <Text className="text-2xl font-bold text-dark mb-6 text-center">
+          Create Your Account
+        </Text>
+        <View className=" mb-1 py-2   ">
+          <Text className="text-left font-semibold text-dark mb-1">
+            Full Name:
+          </Text>
+          <TextInput
+            // label="Full Name"
+            placeholder="Enter full name"
+            value={full_name}
+            onChangeText={setFullName}
+            className="border border-dark py-4  rounded-2xl "
+          />
+        </View>
 
-        <Input
-          label="Phone Number"
-          placeholder="Enter phone"
-          value={phone}
-          onChangeText={setPhone}
-          keyboardType="phone-pad"
-        />
+        <View className="mb-1 py-2  ">
+          <Text className="text-left font-semibold text-dark mb-1">
+            Phone Number:
+          </Text>
 
-        <Input
-          label="Address"
-          placeholder="Enter address"
-          value={address}
-          onChangeText={setAddress}
-        />
+          <TextInput
+            // label="Phone Number"
+            placeholder="Enter phone"
+            value={phone}
+            onChangeText={setPhone}
+            keyboardType="phone-pad"
+            className="border border-dark py-4  rounded-2xl"
+          />
+        </View>
 
-        <Input
-          label="Password"
-          placeholder="Enter password"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-        />
+        <View className="mb-1 py-2  ">
+          <Text className="text-left font-semibold text-dark mb-1">
+            Address:
+          </Text>
+          <TextInput
+            // label="Address"
+            placeholder="Enter address"
+            value={address}
+            onChangeText={setAddress}
+            className="border border-dark py-4   rounded-2xl"
+          />
+        </View>
+
+        <View className=" mb-1 py-2  ">
+          <Text className="text-left font-semibold text-dark mb-1">
+            Password:
+          </Text>
+          <View className="flex-row  justify-between items-center border border-dark py-2  rounded-2xl">
+          <TextInput
+            // label="Password"
+            placeholder="Enter password"
+            secureTextEntry={!showPassword}
+            value={password}
+            onChangeText={setPassword}
+            // secureTextEntry
+            // className=""
+          />
+
+          <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+            <Ionicons
+              name={showPassword ? "eye" : "eye-off"}
+              size={22}
+              color="gray"
+            />
+          </TouchableOpacity>
+          </View>
+        </View>
 
         <Button title="Register" onPress={handleRegister} loading={loading} />
 

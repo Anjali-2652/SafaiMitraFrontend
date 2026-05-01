@@ -13,6 +13,8 @@ type UserType = {
   full_name: string;
   phone: string;
   role: "admin" | "employee" | "user";
+  username: string;
+  address: string;
 };
 
 type AuthContextType = {

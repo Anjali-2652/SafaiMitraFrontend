@@ -1,17 +1,23 @@
+import { Ionicons } from "@expo/vector-icons";
+import { Link } from "expo-router";
+
 import React, { useContext, useState } from "react";
 import {
-  View,
+  Alert,
+  Image,
   Text,
   TextInput,
   TouchableOpacity,
-  Alert,
-  Image,
+  View,
+  ScrollView,
 } from "react-native";
 import { loginUser } from "../../src/api/auth.api";
 import { AuthContext } from "../../src/context/AuthContext";
-import { Link } from "expo-router";
 
 export default function LoginScreen() {
+  const [showPassword, setShowPassword] = useState(false);
+
+
   const { login } = useContext(AuthContext);
 
   const [phone, setPhone] = useState("");
@@ -33,15 +39,17 @@ export default function LoginScreen() {
 
   return (
     <View className="flex-1 bg-secondary justify-center px-6">
-      
-      <View className="items-center mb-10">
-        <Text className="text-4xl font-bold text-primary">सफाई Mitra</Text>
+      <View className="items-center ">
+        <Image
+          source={require("../../public/logo.png")}
+          className="w-40 h-40  rounded-full "
+        />
         <Text className="text-gray-500 mt-2 text-base">
           Janakpur Smart Garbage Management
         </Text>
       </View>
 
-      <View className="bg-white rounded-3xl p-6 shadow-lg">
+      <View className="bg-white px-10 rounded-3xl  py-16 shadow-lg">
         <Text className="text-2xl font-bold text-dark mb-6 text-center">
           Welcome Back
         </Text>
@@ -54,13 +62,24 @@ export default function LoginScreen() {
           className="border border-gray-300 rounded-2xl px-4 py-4 mb-4 text-base"
         />
 
-        <TextInput
-          placeholder="Password"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-          className="border border-gray-300 rounded-2xl px-4 py-4 mb-2 text-base"
-        />
+        <View className="border flex-row  justify-between items-center border-gray-300 rounded-2xl px-4 py-2 mb-2 text-base">
+          <TextInput
+            placeholder="Password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry={!showPassword}
+
+            // secureTextEntry
+          />
+
+          <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+            <Ionicons
+              name={showPassword ? "eye" : "eye-off"}
+              size={22}
+              color="gray"
+            />
+          </TouchableOpacity>
+        </View>
 
         <Link href="/(auth)/forgot-password" asChild>
           <TouchableOpacity>

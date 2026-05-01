@@ -17,3 +17,12 @@ export const loginUser = async (data: {
   const res = await API.post("/auth/login", data);
   return res.data;
 };
+
+export const changeUserPassword = async (payload: {
+  oldPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}) => {
+  const res = await API.put("/auth/change-password", payload);
+  return res.data;
+};
