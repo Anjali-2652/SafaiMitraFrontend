@@ -29,6 +29,16 @@ export default function AdminLayout() {
         }}
       />
 
+         <Tabs.Screen
+        name="city-map"
+        options={{
+          title: "City Map",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="map" size={size} color={color} />
+          ),
+        }}
+      />
+
       <Tabs.Screen
         name="analytics"
         options={{

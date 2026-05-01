@@ -1,23 +1,32 @@
-import { useFocusEffect } from "expo-router";
 import React, { useCallback, useState } from "react";
 import {
   ActivityIndicator,
+  Dimensions,
   RefreshControl,
   ScrollView,
   Text,
   View,
 } from "react-native";
-import { getWardAnalytics } from "../../src/api/admin.api";
+import { useFocusEffect } from "expo-router";
+import { PieChart, BarChart } from "react-native-chart-kit";
+import { Ionicons } from "@expo/vector-icons";
+import { getAdminDashboard, getAllCitizenReports } from "../../src/api/admin.api";
+
+const screenWidth = Dimensions.get("window").width;
 
 export default function AnalyticsScreen() {
-  const [data, setData] = useState<any>(null);
+  const [stats, setStats] = useState<any>(null);
+  const [reports, setReports] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
   const fetchAnalytics = async () => {
     try {
-      const res = await getWardAnalytics();
-      setData(res);
+      const dashboard = await getAdminDashboard();
+      const reportData = await getAllCitizenReports();
+
+      setStats(dashboard);
+      setReports(reportData);
     } catch (error) {
       console.log("ANALYTICS ERROR:", error);
     } finally {
@@ -29,8 +38,44 @@ export default function AnalyticsScreen() {
   useFocusEffect(
     useCallback(() => {
       fetchAnalytics();
-    }, []),
+    }, [])
   );
+
+  const wardCount = reports.reduce((acc: any, item: any) => {
+    acc[item.ward] = (acc[item.ward] || 0) + 1;
+    return acc;
+  }, {});
+
+  const wardLabels = Object.keys(wardCount).slice(0, 5);
+  const wardValues = Object.values(wardCount).slice(0, 5);
+
+  const pieData = [
+    {
+      name: "Pending",
+      population: stats?.pending || 0,
+      color: "red",
+      legendFontColor: "#333",
+      legendFontSize: 13,
+    },
+    {
+      name: "Progress",
+      population: stats?.progress || 0,
+      color: "purple",
+      legendFontColor: "#333",
+      legendFontSize: 13,
+    },
+    {
+      name: "Cleaned",
+      population: stats?.cleaned || 0,
+      color: "green",
+      legendFontColor: "#333",
+      legendFontSize: 13,
+    },
+  ];
+
+  const completionRate = stats?.totalReports
+    ? Math.round((stats.cleaned / stats.totalReports) * 100)
+    : 0;
 
   if (loading) {
     return (
@@ -42,58 +87,124 @@ export default function AnalyticsScreen() {
 
   return (
     <ScrollView
-      className="flex-1 bg-secondary px-2 pt-10"
+      className="flex-1 bg-secondary px-4 pt-10"
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={fetchAnalytics} />
       }
       contentContainerStyle={{ paddingBottom: 100 }}
+      showsVerticalScrollIndicator={false}
     >
-      <Text className="text-3xl font-bold text-primaryDark mb-6">
-        Ward Analytics
+      <Text className="text-3xl font-bold text-primaryDark mb-5">
+        Smart Analytics
       </Text>
 
-      {/* Most Problematic Ward */}
-      <View className="  rounded-3xl mb-6">
-        <Text className="text-2xl px-4 font-semibold text-BrightRed">
-          🚨 Most Problematic Ward
+      {/* TOP PERFORMANCE CARD */}
+      <View className="  p-6 mb-5 bg-[#abdcab]  rounded-3xl">
+        <Text className="text-white text-xl font-bold mb-2">
+          Municipality Cleaning Efficiency
         </Text>
-        {/* <Text className="text-3xl px-4 font-semibold text-WarmBrown mt-2">
-          Ward {data?.mostProblematicWard || "-"}
-        </Text> */}
+        <Text className="text-white text-5xl font-bold">{completionRate}%</Text>
+        <Text className="text-white mt-2">
+          Total complaints resolved successfully
+        </Text>
       </View>
 
-      {/* Ward Cards */}
-      {data?.wardStats?.map((ward: any) => {
-        const max = Math.max(...data.wardStats.map((w: any) => w.total));
-        const widthPercent = (ward.total / max) * 100;
+      {/* QUICK STATS */}
+      <View className="flex-row flex-wrap justify-between mb-4">
+        <View className=" p-5 w-[48%] mb-4 items-center">
+          <Ionicons name="people" size={35} color="#1E3A8A" />
+          <Text className="text-3xl font-bold text-primary mt-2">
+            {stats.totalUsers}
+          </Text>
+          <Text>Citizens</Text>
+        </View>
 
-        return (
-          <View
-            key={ward.ward}
-            className="bg-white p-5 rounded-3xl mb-4 shadow shadow-BrightRed px-8 py-10 "
-          >
-            <Text className="text-lg font-bold text-BrightRed mb-3">
-              Ward {ward.ward}
-            </Text>
+        <View className="bg-white rounded-3xl p-5 w-[48%] mb-4 items-center">
+          <Ionicons name="document-text" size={35} color="#1E3A8A" />
+          <Text className="text-3xl font-bold text-primary mt-2">
+            {stats.totalReports}
+          </Text>
+          <Text>Reports</Text>
+        </View>
+      </View>
 
-            {/* Bar */}
-            <View className="h-3 bg-gray-200 rounded-full overflow-hidden mb-4">
-              <View
-                style={{ width: `${widthPercent}%` }}
-                className="h-3 bg-BrightRed"
-              />
-            </View>
+      {/* PIE CHART */}
+      <View className="bg-white rounded-3xl p-4 mb-5">
+        <Text className="text-xl font-bold text-primary mb-4 text-center">
+          Complaint Status Distribution
+        </Text>
 
-            {/* Stats */}
-            <View className="flex-row justify-between">
-              <Text className="text-gray-600">Total:{ward.total}</Text>
-              <Text className="text-yellow-600">Pending:{ward.pending}</Text>
-              <Text className="text-blue-600">Progress:{ward.progress}</Text>
-              <Text className="text-green-600">Cleaned:{ward.cleaned}</Text>
-            </View>
-          </View>
-        );
-      })}
+        <PieChart
+          data={pieData}
+          width={screenWidth - 40}
+          height={220}
+          chartConfig={{
+            color: () => `#000`,
+          }}
+          accessor={"population"}
+          backgroundColor={"transparent"}
+          paddingLeft={"20"}
+          absolute
+        />
+      </View>
+
+      {/* BAR CHART */}
+      <View className="bg-white rounded-3xl p-4 mb-5">
+        <Text className="text-xl font-bold text-primary mb-4 text-center">
+          Top Complaint Wards
+        </Text>
+
+        <BarChart
+          data={{
+            labels: wardLabels.map((w) => `W${w}`),
+            datasets: [{ data: wardValues as number[] }],
+          }}
+          width={screenWidth - 40}
+          height={260}
+          fromZero
+          yAxisLabel=""
+          yAxisSuffix=""
+          showValuesOnTopOfBars
+          chartConfig={{
+            backgroundGradientFrom: "#fff",
+            backgroundGradientTo: "#fff",
+            decimalPlaces: 0,
+            color: () => `#ff0000`,
+            labelColor: () => `#000000`,
+            barPercentage: 0.6,
+          }}
+          style={{
+            borderRadius: 16,
+          }}
+        />
+      </View>
+
+      {/* SMART INSIGHTS */}
+      <View className="bg-white rounded-3xl p-5 mb-5">
+        <Text className="text-xl font-bold text-primary mb-3">
+          AI Municipality Insights
+        </Text>
+
+        <Text className="text-gray-700 mb-2">
+          • Highest complaint concentration detected in Ward {wardLabels[0] || "-"}
+        </Text>
+
+        <Text className="text-gray-700 mb-2">
+          • {stats.pending} complaints are awaiting action from municipality staff
+        </Text>
+
+        <Text className="text-gray-700 mb-2">
+          • {stats.progress} complaints are currently under cleaning process
+        </Text>
+
+        <Text className="text-gray-700 mb-2">
+          • {stats.cleaned} locations have been successfully cleaned
+        </Text>
+
+        <Text className="text-gray-700">
+          • Overall municipal response performance is {completionRate}% efficient
+        </Text>
+      </View>
     </ScrollView>
   );
 }

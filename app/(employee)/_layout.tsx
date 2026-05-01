@@ -29,6 +29,16 @@ export default function EmployeeLayout() {
         }}
       />
 
+    <Tabs.Screen
+        name="task-map"
+        options={{
+          title: "Task Map",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="map" size={size} color={color} />
+          ),
+        }}
+      />
+
       <Tabs.Screen
         name="update-status"
         options={{
@@ -38,6 +48,7 @@ export default function EmployeeLayout() {
           ),
         }}
       />
+
 
       <Tabs.Screen
         name="profile"

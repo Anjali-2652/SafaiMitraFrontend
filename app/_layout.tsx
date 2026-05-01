@@ -14,9 +14,9 @@ function RootNavigation() {
     const inAuthGroup = segments[0] === "(auth)";
     const inAdminGroup = segments[0] === "(admin)";
     const inEmployeeGroup = segments[0] === "(employee)";
-    const inUserGroup = segments[0] === "(tabs)";
+    const inUserGroup = segments[0] === "(user)";
 
-    // 🔐 Not logged in
+    // Not logged in
     if (!token) {
       if (!inAuthGroup) {
         router.replace("/(auth)/login");
@@ -26,34 +26,52 @@ function RootNavigation() {
 
     if (!user) return;
 
-    // ✅ Logged in role redirects
+    // Admin redirect
     if (user.role === "admin") {
       if (!inAdminGroup) {
         router.replace("/(admin)");
       }
+      return;
     }
-if (user.role === "employee") {
+
+    // Employee redirect
+    if (user.role === "employee") {
       if (!inEmployeeGroup) {
         router.replace("/(employee)");
       }
-    }
-    if (user.role === "user") {
-      if (!inUserGroup) {
-        router.replace("/(tabs)");
-      }
+      return;
     }
 
+    // Citizen redirect
+    if (user.role === "user") {
+      if (!inUserGroup) {
+        router.replace("/(user)");
+      }
+      return;
+    }
   }, [token, user, loading]);
 
   if (loading) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size="large" />
+        <ActivityIndicator size="large" color="#1E3A8A" />
       </View>
     );
   }
 
-  return <Stack screenOptions={{ headerShown: false }} />;
+ return (
+  <Stack screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="(auth)" />
+    <Stack.Screen name="(user)" />
+    <Stack.Screen name="(admin)" />
+    <Stack.Screen name="(employee)" />
+
+    <Stack.Screen name="screens/report-details" />
+    <Stack.Screen name="screens/admin-report-details" />
+    <Stack.Screen name="screens/change-password" />
+    <Stack.Screen name="screens/employee-task-details" />
+  </Stack>
+);
 }
 
 export default function Layout() {

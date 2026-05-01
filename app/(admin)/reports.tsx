@@ -110,7 +110,7 @@ export default function AdminReportsScreen() {
         filteredReports.map((item) => (
           <TouchableOpacity
             key={item._id}
-            onPress={() => router.push(`/admin-report-details?id=${item._id}`)}
+            onPress={() => router.push(`/screens/admin-report-details?id=${item._id}`)}
             className="bg-white rounded-2xl flex-row justify-between p-4 mb-5 border border-primaryDark"
           >
             <View className="flex-1 pr-2">

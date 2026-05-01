@@ -16,7 +16,7 @@ import {
   assignEmployeeToReport,
   getAllEmployees,
   getSingleAdminReport,
-} from "../src/api/admin.api";
+} from "../../src/api/admin.api";
 
 export default function AdminReportDetails() {
   const { id } = useLocalSearchParams();

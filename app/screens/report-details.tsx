@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { getSingleGarbageReport } from "../src/api/report.api";
+import { getSingleGarbageReport } from "../../src/api/report.api";
 
 export default function ReportDetailsScreen() {
   const { id } = useLocalSearchParams();

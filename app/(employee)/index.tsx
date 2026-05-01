@@ -1,6 +1,13 @@
-import React, { useCallback, useState } from "react";
-import { ActivityIndicator, RefreshControl, ScrollView, Text, View } from "react-native";
 import { useFocusEffect } from "expo-router";
+import React, { useCallback, useState } from "react";
+import {
+  ActivityIndicator,
+  Image,
+  RefreshControl,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 import { getAssignedWorks } from "../../src/api/employee.api";
 
 export default function EmployeeDashboard() {
@@ -23,7 +30,7 @@ export default function EmployeeDashboard() {
   useFocusEffect(
     useCallback(() => {
       fetchReports();
-    }, [])
+    }, []),
   );
 
   const progressCount = reports.filter((r) => r.status === "progress").length;
@@ -45,39 +52,64 @@ export default function EmployeeDashboard() {
         <RefreshControl refreshing={refreshing} onRefresh={fetchReports} />
       }
     >
-      <Text className="text-3xl font-bold text-primary mb-2">
-        Worker Dashboard
+      <Text className="text-3xl font-bold text-primaryDark ">
+        Driver Dashboard
       </Text>
-      <Text className="text-gray-500 mb-6">
+      <Text className="text-gray-500 mb-4">
         Track your municipal cleaning performance
       </Text>
 
+      <Image
+        source={require("../../public/image3.png")}
+        className="w-full h-48 mb-5 rounded-2xl"
+      />
+
       <View className="flex-row justify-between mb-5">
-        <View className="bg-white w-[30%] rounded-3xl p-5 items-center shadow">
-          <Text className="text-2xl font-bold text-primary">{assignedCount}</Text>
-          <Text className="text-xs mt-1">Assigned</Text>
+        <View className="items-center w-[30%]">
+          <View className="w-20 h-20 rounded-full justify-center items-center mb-2 shadow shadow-BrightRed ">
+            <Text className="text-4xl font-bold text-BrightRed">
+              {assignedCount}
+            </Text>
+          </View>
+          <Text className=" text-BrightRed text-sm font-medium">Assigned</Text>
         </View>
 
-        <View className="bg-white w-[30%] rounded-3xl p-5 items-center shadow">
-          <Text className="text-2xl font-bold text-blue-700">{progressCount}</Text>
-          <Text className="text-xs mt-1">Progress</Text>
+        <View className="items-center w-[30%]">
+          <View className="w-20 h-20 rounded-full justify-center items-center mb-2 shadow shadow-RichPurple ">
+            <Text className="text-4xl font-bold text-RichPurple">
+              {progressCount}
+            </Text>
+          </View>
+          <Text className=" text-RichPurple text-sm font-medium">Progress</Text>
         </View>
 
-        <View className="bg-white w-[30%] rounded-3xl p-5 items-center shadow">
-          <Text className="text-2xl font-bold text-green-700">{cleanedCount}</Text>
-          <Text className="text-xs mt-1">Cleaned</Text>
+        <View className="items-center w-[30%]">
+          <View className="w-20 h-20 rounded-full justify-center items-center mb-2 shadow shadow-primary ">
+            <Text className="text-4xl font-bold text-primary">
+              {cleanedCount}
+            </Text>
+          </View>
+          <Text className=" text-primary text-sm font-medium">Cleaned</Text>
         </View>
       </View>
 
-      <View className="bg-white rounded-3xl p-6 shadow">
-        <Text className="text-lg font-bold text-primary mb-2">
+      <View className="bg-white rounded-3xl p-6 shadow shadow-primary px-8 py-8  ">
+        <Text className="text-2xl font-bold text-primary mb-2">
           Employee Guidelines
         </Text>
 
-        <Text className="text-gray-600 mb-2">• Visit assigned garbage locations on time</Text>
-        <Text className="text-gray-600 mb-2">• Mark progress when work starts</Text>
-        <Text className="text-gray-600 mb-2">• Upload cleaned proof image after completion</Text>
-        <Text className="text-gray-600">• Maintain ward cleanliness regularly</Text>
+        <Text className="text-dark mb-2 text-md italic">
+          • Visit assigned garbage locations on time
+        </Text>
+        <Text className="text-dark mb-2 text-md italic">
+          • Mark progress when work starts
+        </Text>
+        <Text className="text-dark mb-2 text-md italic">
+          • Upload cleaned proof image after completion
+        </Text>
+        <Text className="text-dark text-md italic">
+          • Maintain ward cleanliness regularly
+        </Text>
       </View>
     </ScrollView>
   );

@@ -82,7 +82,7 @@ export default function HomeScreen() {
       {/* Quick Actions */}
       <View className="flex-row justify-between mb-6">
         <TouchableOpacity
-          onPress={() => router.push("/(tabs)/create-report")}
+          onPress={() => router.push("/(user)/create-report")}
           className="p-5 rounded-2xl w-[48%] border-2 border-primaryDark"
         >
           <Ionicons name="camera" size={36} color="#256f45" />
@@ -92,7 +92,7 @@ export default function HomeScreen() {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => router.push("/(tabs)/my-reports")}
+          onPress={() => router.push("/(user)/my-reports")}
           className=" p-5 rounded-2xl w-[48%] border-2 border-primaryDark"
         >
           <Ionicons name="document-text" size={36} color="#256f46" />

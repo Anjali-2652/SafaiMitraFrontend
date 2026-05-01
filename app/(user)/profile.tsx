@@ -8,6 +8,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Alert, 
 } from "react-native";
 import { getUserProfile } from "../../src/api/user.api";
 import { AuthContext } from "../../src/context/AuthContext";
@@ -35,7 +36,7 @@ export default function ProfileScreen() {
   useFocusEffect(
     useCallback(() => {
       fetchProfile();
-    }, [])
+    }, []),
   );
 
   const onRefresh = () => {
@@ -60,7 +61,9 @@ export default function ProfileScreen() {
       contentContainerStyle={{ paddingBottom: 100 }}
       showsVerticalScrollIndicator={false}
     >
-      <Text className="text-2xl font-bold text-primaryDark mb-6">My Profile</Text>
+      <Text className="text-2xl font-bold text-primaryDark mb-6">
+        My Profile
+      </Text>
 
       {/* Avatar + User Card */}
       <View className=" rounded-full p-6 shadow shadow-primary mb-6 items-center border border-primaryDark">
@@ -105,7 +108,9 @@ export default function ProfileScreen() {
                 {profile.stats.totalReports}
               </Text>
             </View>
-            <Text className="text-sm text-RichPurple font-medium">Submitted</Text>
+            <Text className="text-sm text-RichPurple font-medium">
+              Submitted
+            </Text>
           </View>
 
           {/* Cleaned */}
@@ -132,7 +137,7 @@ export default function ProfileScreen() {
 
       {/* Change Password */}
       <TouchableOpacity
-        onPress={() => router.push("/change-password")}
+        onPress={() => router.push("/screens/change-password")}
         className="bg-RichPurple rounded-2xl p-5 mb-4 flex-row justify-center items-center"
       >
         <Ionicons name="lock-closed" size={18} color="#fff" />
@@ -143,7 +148,12 @@ export default function ProfileScreen() {
 
       {/* Logout */}
       <TouchableOpacity
-        onPress={logout}
+        onPress={() =>
+          Alert.alert("Logout", "Are you sure you want to logout?", [
+            { text: "Cancel" },
+            { text: "Logout", onPress: logout },
+          ])
+        }
         className="rounded-2xl p-5 bg-BrightRed flex-row justify-center items-center"
       >
         <Ionicons name="log-out" size={18} color="#fff" />

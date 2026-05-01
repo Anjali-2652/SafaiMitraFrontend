@@ -161,7 +161,7 @@ export default function MyReportsScreen() {
         filteredReports.map((item) => (
           <TouchableOpacity
             key={item._id}
-            onPress={() => router.push(`/report-details?id=${item._id}`)}
+            onPress={() => router.push(`/screens/report-details?id=${item._id}`)}
             className="bg-white rounded-2xl flex flex-row justify-between p-4 mb-5 border border-primaryDark"
           >
             <View className="flex-1 pr-2">

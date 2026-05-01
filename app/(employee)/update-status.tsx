@@ -42,13 +42,13 @@ export default function UpdateStatusHistory() {
       </Text>
 
       {reports.map((item) => (
-        <View key={item._id} className="bg-white rounded-3xl p-4 mb-5 shadow">
+        <View key={item._id} className="bg-white rounded-3xl p-4 mb-5 shadow shadow-primary">
           <Image source={{ uri: item.image }} className="w-full h-40 rounded-2xl mb-4" />
-          <Text className="text-lg font-bold text-primary capitalize">
+          <Text className="text-lg font-bold text-primary capitalize px-5">
             {item.garbage_type} Garbage
           </Text>
-          <Text className="text-gray-600">{item.description}</Text>
-          <Text className="mt-2 font-semibold capitalize">Status: {item.status}</Text>
+          <Text className="px-5">{item.description}</Text>
+          <Text className="mt-2 font-semibold text-primary capitalize px-5 pb-2">Status: {item.status}</Text>
         </View>
       ))}
     </ScrollView>

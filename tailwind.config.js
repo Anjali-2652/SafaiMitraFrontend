@@ -38,7 +38,10 @@ module.exports = {
       CoolGray: "#8c92ac",
       WarmBrown: "#a52a2a",
       secondary: "#f4f7f5",
-      dark: "#1f2937"
+      dark: "#1f2937",
+      lightGreen:  "#83f2bf",
+      lightRed: "#ff474c",
+      lightPurple: "#cbc3e3"
     }
   },
   plugins: [],

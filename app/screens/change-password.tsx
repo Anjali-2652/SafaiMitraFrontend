@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { changeUserPassword } from "../src/api/auth.api";
+import { changeUserPassword } from "../../src/api/auth.api"
 
 export default function ChangePasswordScreen() {
   const router = useRouter();
